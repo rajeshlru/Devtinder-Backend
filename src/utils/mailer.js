@@ -3,8 +3,8 @@ const nodemailer = require("nodemailer");
 const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
-    user: process.env.GMAIL_USER || "rajeshelluru143@gmail.com",
-    pass: process.env.GMAIL_PASS || "hlir mvsf pxio dgxm",
+    user: process.env.GMAIL_USER,
+    pass: process.env.GMAIL_PASS,
   },
 });
 
@@ -59,7 +59,7 @@ const sendConnectionRequestEmail = async (toUser, fromUser, status) => {
 
   try {
     const info = await transporter.sendMail({
-      from: process.env.GMAIL_USER || "rajeshelluru143@gmail.com",
+      from: process.env.GMAIL_USER,
       to: toUser.emailId,
       subject: subject,
       html: htmlMessage,
@@ -78,7 +78,7 @@ const sendContactFormEmail = async (formData) => {
 
   const mailOptions = {
     from: email, // Use your email as sender
-    to: process.env.YOUR_EMAIL || "rajeshelluru143@gmail.com", // Your email to receive messages
+    to: process.env.YOUR_EMAIL, // Your email to receive messages
     subject: `New Contact Form Submission from ${firstName} ${lastName}`,
     html: `
 <div style="font-family: 'Arial', sans-serif; max-width: 600px; margin: 0 auto; background: #f4f6f9; border-radius: 15px; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.05);">
