@@ -77,8 +77,33 @@ const userSchema = new mongoose.Schema(
       type: [String],
       trim: true,
     },
+    onboardingDay1Sent: {
+      type: Boolean,
+      default: false,
+    },
+    onboardingDay3Sent: {
+      type: Boolean,
+      default: false,
+    },
+    onboardingDay7Sent: {
+      type: Boolean,
+      default: false,
+    },
+    emailPreferences: {
+      type: Boolean,
+      default: true,
+    },
+    onboardingDay1SentAt: Date,
+    onboardingDay2SentAt: Date,
+    onboardingDay3SentAt: Date,
+    emailPreferences: {
+      type: Boolean,
+      default: true,
+    },
   },
-  { timestamps: true }
+  {
+    timestamps: true,
+  }
 );
 
 userSchema.pre("save", function (next) {
