@@ -142,13 +142,18 @@ requestRouter.post("/send-email", async (req, res) => {
       photoUrl,
     });
 
+    console.log("📧 Email sent result:", emailSent);
+
     if (emailSent) {
+      console.log("✅ Email sent successfully");
       res.json({ success: true, message: "Email sent successfully" });
     } else {
+      console.log("❌ Email sending failed");
       res.status(500).json({ success: false, message: "Failed to send email" });
     }
   } catch (error) {
-    console.error("Error in /api/send-email route:", error);
+    console.error("❌ Error in send-email route:", error);
+    console.error("❌ Full error details:", error.message, error.stack);
     res.status(500).json({ success: false, message: "Internal server error" });
   }
 });
