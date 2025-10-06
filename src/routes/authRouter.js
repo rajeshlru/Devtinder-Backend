@@ -64,6 +64,12 @@ authRouter.post("/signup", async (req, res) => {
 
 authRouter.post("/login", async (req, res) => {
   let { emailId, password } = req.body;
+  if (!emailId || !password) {
+    return res.status(400).json({
+      message: "Email and password are required",
+    });
+  }
+
   try {
     emailId = emailId.toLowerCase();
     const user = await User.findOne({ emailId: emailId }).collation({
