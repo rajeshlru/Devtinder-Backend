@@ -1,10 +1,8 @@
-// routes/messages.js
 const express = require("express");
 const router = express.Router();
 const Message = require("../modules/Message");
 const auth = require("../middleware/auth");
 
-// Get chat history with pagination
 router.get("/history/:targetUserId", auth, async (req, res) => {
   try {
     const { targetUserId } = req.params;
@@ -26,7 +24,7 @@ router.get("/history/:targetUserId", auth, async (req, res) => {
     const totalMessages = await Message.countDocuments({ chatRoom: roomId });
 
     res.json({
-      messages: messages.reverse(), // Return in chronological order
+      messages: messages.reverse(),
       pagination: {
         page,
         limit,
@@ -40,7 +38,6 @@ router.get("/history/:targetUserId", auth, async (req, res) => {
   }
 });
 
-// Mark messages as read
 router.put("/mark-read/:targetUserId", auth, async (req, res) => {
   try {
     const { targetUserId } = req.params;
@@ -72,7 +69,6 @@ router.put("/mark-read/:targetUserId", auth, async (req, res) => {
   }
 });
 
-// Delete a message
 router.delete("/:messageId", auth, async (req, res) => {
   try {
     const { messageId } = req.params;

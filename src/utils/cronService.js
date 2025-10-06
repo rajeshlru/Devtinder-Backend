@@ -35,7 +35,6 @@ class CronService {
     this.startNewYearWishes();
     this.startUserOnboardingSequence();
 
-    // Add the new smart features
     this.startReengagementCampaign();
     this.startWeeklyDigest();
 
@@ -43,7 +42,7 @@ class CronService {
     //   "🎉 All cron jobs initialized - New Year, Onboarding, Re-engagement & Weekly Reports"
     // );
   }
-  // 1. New Year Wishes to all users on January 1st, 12:00 AM every year
+
   startNewYearWishes() {
     const job = cron.schedule("0 0 1 1 *", async () => {
       //console.log("🎊 New Year cron job triggered");
@@ -84,18 +83,15 @@ class CronService {
     //console.log("✅ New Year wishes job scheduled (Jan 1st, 12:00 AM yearly)");
   }
 
-  // 2. User onboarding sequence
   startUserOnboardingSequence() {
-    // Day 1: Send after 3 minutes of signup
     const day1Job = cron.schedule("* * * * *", async () => {
       try {
         const now = new Date();
 
-        // Users who signed up 3-4 minutes ago (gets Day 1 email)
         const day1Users = await User.find({
           createdAt: {
-            $gte: new Date(now - 4 * 60 * 1000), // 4 minutes ago
-            $lt: new Date(now - 3 * 60 * 1000), // 3 minutes ago
+            $gte: new Date(now - 4 * 60 * 1000),
+            $lt: new Date(now - 3 * 60 * 1000),
           },
           onboardingDay1Sent: { $ne: true },
         });
@@ -117,7 +113,6 @@ class CronService {
       }
     });
 
-    // Day 2: Send at 9 AM for users who signed up yesterday
     const day2Job = cron.schedule("0 9 * * *", async () => {
       try {
         const now = new Date();
@@ -153,7 +148,6 @@ class CronService {
       }
     });
 
-    // Day 3: Send at 9 AM for users who signed up 2 days ago
     const day3Job = cron.schedule("0 9 * * *", async () => {
       try {
         const now = new Date();
@@ -196,7 +190,6 @@ class CronService {
     //console.log("   - Day3: 9 AM after 2 days");
   }
 
-  // New Year Wish Email (your exact HTML)
   async sendNewYearWishEmail(firstName, email) {
     const mailOptions = {
       from: process.env.GMAIL_USER,
@@ -277,7 +270,6 @@ class CronService {
     }
   }
 
-  // Day 1 Onboarding Email (your exact HTML)
   async sendDay1OnboardingEmail(firstName, email) {
     const mailOptions = {
       from: process.env.GMAIL_USER,
@@ -342,7 +334,6 @@ class CronService {
     }
   }
 
-  // Day 2 Onboarding Email (your exact HTML)
   async sendDay2OnboardingEmail(firstName, email) {
     const mailOptions = {
       from: process.env.GMAIL_USER,
@@ -398,7 +389,6 @@ class CronService {
     }
   }
 
-  // Day 3 Onboarding Email (your exact HTML)
   async sendDay3OnboardingEmail(firstName, email) {
     const mailOptions = {
       from: process.env.GMAIL_USER,
@@ -465,11 +455,8 @@ class CronService {
     }
   }
 
-  // Smart Re-engagement Campaign with Multiple Touchpoints
   startReengagementCampaign() {
-    // Touchpoint 1: 15 days inactive (Gentle reminder)
     const touchpoint1 = cron.schedule("0 11 * * *", async () => {
-      // Daily at 11 AM
       try {
         const fifteenDaysAgo = new Date(Date.now() - 15 * 24 * 60 * 60 * 1000);
         const twentyDaysAgo = new Date(Date.now() - 20 * 24 * 60 * 60 * 1000);
@@ -480,8 +467,8 @@ class CronService {
             $lt: fifteenDaysAgo,
           },
           emailPreferences: true,
-          reengagementStage: { $exists: false }, // First touchpoint
-        }).limit(100); // Limit for rate control
+          reengagementStage: { $exists: false },
+        }).limit(100);
 
         console.log(
           `🔔 Re-engagement Touchpoint 1: Found ${inactiveUsers.length} users`
@@ -510,9 +497,7 @@ class CronService {
       }
     });
 
-    // Touchpoint 2: 30 days inactive (Show what they're missing)
     const touchpoint2 = cron.schedule("0 12 * * 1", async () => {
-      // Monday 12 PM
       try {
         const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
         const fortyDaysAgo = new Date(Date.now() - 40 * 24 * 60 * 60 * 1000);
@@ -523,10 +508,10 @@ class CronService {
             $lt: thirtyDaysAgo,
           },
           emailPreferences: true,
-          reengagementStage: 1, // Only users who received first touchpoint
+          reengagementStage: 1,
           lastReengagementSent: {
             $lt: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000),
-          }, // 10 days after first
+          },
         });
 
         console.log(
@@ -534,7 +519,6 @@ class CronService {
         );
 
         for (const user of inactiveUsers) {
-          // Get what they're missing
           const newConnections = await ConnectionRequest.countDocuments({
             toUserId: user._id,
             status: "interested",
@@ -568,9 +552,7 @@ class CronService {
       }
     });
 
-    // Touchpoint 3: 45 days inactive (Final offer/survey)
     const touchpoint3 = cron.schedule("0 14 * * 3", async () => {
-      // Wednesday 2 PM
       try {
         const fortyFiveDaysAgo = new Date(
           Date.now() - 45 * 24 * 60 * 60 * 1000
@@ -583,10 +565,10 @@ class CronService {
             $lt: fortyFiveDaysAgo,
           },
           emailPreferences: true,
-          reengagementStage: 2, // Only users who received second touchpoint
+          reengagementStage: 2,
           lastReengagementSent: {
             $lt: new Date(Date.now() - 12 * 24 * 60 * 60 * 1000),
-          }, // 12 days after second
+          },
         });
 
         console.log(
@@ -616,10 +598,9 @@ class CronService {
     });
 
     this.jobs.push(touchpoint1, touchpoint2, touchpoint3);
-    //console.log("✅ Smart Re-engagement Campaign Scheduled (3 touchpoints)");
+    //console.log(" Smart Re-engagement Campaign Scheduled (3 touchpoints)");
   }
 
-  // Re-engagement Email Templates
   async sendReengagementEmail1(user) {
     const mailOptions = {
       from: process.env.GMAIL_USER,
@@ -821,7 +802,6 @@ class CronService {
 
   startWeeklyDigest() {
     const job = cron.schedule("0 9 * * 1", async () => {
-      // Monday 9 AM
       try {
         const oneWeekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
 
@@ -847,7 +827,6 @@ class CronService {
     });
 
     this.jobs.push(job);
-    //console.log("✅ Beautiful weekly digest scheduled (Monday 9 AM)");
   }
 
   async sendWeeklyDigestEmail(user) {
@@ -1021,7 +1000,6 @@ class CronService {
 
   startWeeklyAdminReport() {
     const job = cron.schedule("0 8 * * 1", async () => {
-      // Monday 8 AM
       try {
         const totalUsers = await User.countDocuments();
         const activeUsers = await User.countDocuments({
@@ -1163,14 +1141,13 @@ class CronService {
 
   startInactiveUserReminder() {
     const job = cron.schedule("0 11 * * 0", async () => {
-      // Sunday 11 AM
       try {
         const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
 
         const inactiveUsers = await User.find({
           lastActive: { $lt: thirtyDaysAgo },
           emailPreferences: true,
-        }).limit(50); // Limit to avoid spam
+        }).limit(50);
 
         console.log(
           `🎯 Found ${inactiveUsers.length} users inactive for 30+ days`
@@ -1321,7 +1298,6 @@ class CronService {
     console.log("✅ Beautiful inactive user reminder scheduled (Sunday 11 AM)");
   }
 
-  // Stop all cron jobs
   stopAll() {
     this.jobs.forEach((job) => job.stop());
     console.log("🛑 All cron jobs stopped");

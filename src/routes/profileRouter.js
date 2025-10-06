@@ -93,12 +93,10 @@ profileRouter.get("/:id", async (req, res) => {
   try {
     const { id } = req.params;
 
-    // validate ObjectId
     if (!id) {
       return res.status(400).json({ error: "Invalid user id" });
     }
 
-    // return only public fields
     const user = await User.findById(id).select("firstName lastName photoUrl ");
     if (!user) return res.status(404).json({ error: "User not found" });
 

@@ -6,7 +6,7 @@ const User = require("../modules/user");
 const {
   sendConnectionRequestEmail,
   sendContactFormEmail,
-} = require("../utils/mailer"); // Fix import
+} = require("../utils/mailer");
 
 //igonored, interested
 

@@ -7,17 +7,15 @@ const transporter = nodemailer.createTransport({
     user: process.env.GMAIL_USER,
     pass: process.env.GMAIL_PASS,
   },
-  // Add connection options
-  socketTimeout: 60000, // 60 seconds
-  connectionTimeout: 60000, // 60 seconds
-  greetingTimeout: 30000, // 30 seconds
-  secure: false, // Use TLS
+  socketTimeout: 60000,
+  connectionTimeout: 60000,
+  greetingTimeout: 30000,
+  secure: false,
   tls: {
     rejectUnauthorized: false,
   },
 });
 
-// Enhanced verification with retry
 const verifyTransporter = async (retries = 3) => {
   for (let i = 0; i < retries; i++) {
     try {
@@ -33,7 +31,7 @@ const verifyTransporter = async (retries = 3) => {
         console.log("✗ All email verification attempts failed");
         return false;
       }
-      // Wait before retry
+
       await new Promise((resolve) => setTimeout(resolve, 2000));
     }
   }
@@ -110,8 +108,8 @@ const sendContactFormEmail = async (formData) => {
   const { firstName, lastName, email, phone, message, photoUrl } = formData;
 
   const mailOptions = {
-    from: email, // Use your email as sender
-    to: process.env.YOUR_EMAIL, // Your email to receive messages
+    from: email,
+    to: process.env.YOUR_EMAIL,
     subject: `New Contact Form Submission from ${firstName} ${lastName}`,
     html: `
 <div style="font-family: 'Arial', sans-serif; max-width: 600px; margin: 0 auto; background: #f4f6f9; border-radius: 15px; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.05);">
@@ -312,7 +310,6 @@ const sendWelcomeEmail = async (firstName, lastName, emailId, retries = 3) => {
         return false;
       }
 
-      // Wait before retry (exponential backoff)
       const delay = Math.min(1000 * Math.pow(2, attempt), 10000);
       console.log(`Retrying in ${delay}ms...`);
       await new Promise((resolve) => setTimeout(resolve, delay));

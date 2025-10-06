@@ -89,7 +89,6 @@ app.get("/admin/test-day1/:email", async (req, res) => {
   }
 });
 
-// Test Re-engagement Campaign
 app.get("/admin/test-reengagement/:email", async (req, res) => {
   try {
     const user = await User.findOne({ emailId: req.params.email });
@@ -100,12 +99,11 @@ app.get("/admin/test-reengagement/:email", async (req, res) => {
       });
     }
 
-    // Simulate inactive user by updating lastActive
     await User.findByIdAndUpdate(user._id, {
-      lastActive: new Date(Date.now() - 35 * 24 * 60 * 60 * 1000), // 35 days ago
+      lastActive: new Date(Date.now() - 35 * 24 * 60 * 60 * 1000),
     });
 
-    const emailSent = await cronService.sendReengagementEmail2(user, 5); // Simulate 5 new connections
+    const emailSent = await cronService.sendReengagementEmail2(user, 5);
 
     res.json({
       success: true,

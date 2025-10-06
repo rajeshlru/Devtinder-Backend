@@ -1,10 +1,9 @@
 const socket = require("socket.io");
-const Message = require("../modules/Message"); // Import Message model
+const Message = require("../modules/Message");
 const User = require("../modules/user");
 const crypto = require("crypto");
 const { v4: uuidv4 } = require("uuid");
 
-// Generate consistent hash for roomId
 const generateRoomHash = (userId, targetUserId) => {
   const roomId = [userId, targetUserId].sort().join("$@#");
   return crypto.createHash("sha256").update(roomId).digest("hex");
@@ -37,13 +36,11 @@ const initialiseSocket = (server) => {
       const roomId = generateRoomHash(userId, targetUserId);
       // console.log(`🙋‍♂️ ${firstName} (${userId}) joined room: ${roomId}`);
 
-      // Store user connection
       connectedUsers.set(userId, socket.id);
       socket.userId = userId;
       userRooms.set(userId, roomId);
       socket.join(roomId);
 
-      // Send chat history when user joins
       try {
         const messages = await Message.find({
           chatRoom: roomId,
@@ -51,17 +48,14 @@ const initialiseSocket = (server) => {
           .populate("sender", "firstName lastName photoUrl")
           .populate("receiver", "firstName lastName photoUrl")
           .sort({ timestamp: 1 })
-          .limit(100); // Last 100 messages
-
+          .limit(100);
         socket.emit("chatHistory", messages);
       } catch (error) {
         console.error("Error fetching chat history:", error);
       }
 
-      // Notify room
       socket.to(roomId).emit("userJoined", { userId, firstName });
 
-      // Broadcast online status
       socket.broadcast.emit("userWentOnline", {
         userId: userId,
         isOnline: true,
@@ -86,7 +80,6 @@ const initialiseSocket = (server) => {
         const roomId = generateRoomHash(userId, targetUserId);
 
         try {
-          // Save message to database with proper error handling
           const newMessage = new Message({
             text: text.trim(),
             sender: userId,
@@ -99,14 +92,12 @@ const initialiseSocket = (server) => {
 
           const savedMessage = await newMessage.save();
 
-          // Populate sender and receiver info before emitting
           const populatedMessage = await Message.findById(savedMessage._id)
             .populate("sender", "firstName lastName photoUrl")
             .populate("receiver", "firstName lastName photoUrl");
 
           // console.log(`💬 Message saved to DB: ${savedMessage._id}`);
 
-          // Emit to room with full populated message data
           io.to(roomId).emit("messageReceived", {
             _id: populatedMessage._id,
             text: populatedMessage.text,
@@ -120,7 +111,6 @@ const initialiseSocket = (server) => {
           });
         } catch (error) {
           console.error("❌ Error saving message to database:", error);
-          // Emit error back to sender with more details
           socket.emit("messageError", {
             error: "Failed to send message - please try again",
             originalText: text,
@@ -129,7 +119,6 @@ const initialiseSocket = (server) => {
       }
     );
 
-    // Mark messages as read
     socket.on("markMessagesAsRead", async ({ userId, targetUserId }) => {
       try {
         const roomId = generateRoomHash(userId, targetUserId);
@@ -151,7 +140,6 @@ const initialiseSocket = (server) => {
           }
         );
 
-        // Notify sender that messages were read
         socket.to(roomId).emit("messagesRead", {
           readerId: userId,
           timestamp: new Date(),
@@ -161,7 +149,6 @@ const initialiseSocket = (server) => {
       }
     });
 
-    // Get chat history
     socket.on(
       "getChatHistory",
       async ({ targetUserId, page = 1, limit = 50 }) => {
@@ -179,7 +166,7 @@ const initialiseSocket = (server) => {
             .skip((page - 1) * limit)
             .limit(limit);
 
-          socket.emit("chatHistory", messages.reverse()); // Reverse to get chronological order
+          socket.emit("chatHistory", messages.reverse());
         } catch (error) {
           console.error("Error fetching chat history:", error);
           socket.emit("chatHistoryError", { error: "Failed to load messages" });
@@ -187,14 +174,11 @@ const initialiseSocket = (server) => {
       }
     );
 
-    // Your existing typing and online status events remain the same...
     socket.on("typing", (data) => {
       const { userId, targetUserId } = data;
       if (!userId || !targetUserId) return;
       const roomId = generateRoomHash(userId, targetUserId);
-      // Join the room first to ensure proper targeting
       socket.join(roomId);
-      // Emit to everyone in the room EXCEPT the sender
       socket.to(roomId).emit("typing", { userId });
     });
 
@@ -203,14 +187,11 @@ const initialiseSocket = (server) => {
       if (!userId || !targetUserId) return;
       const roomId = generateRoomHash(userId, targetUserId);
 
-      // Join the room first to ensure proper targeting
       socket.join(roomId);
-      // Emit to everyone in the room EXCEPT the sender
       socket.to(roomId).emit("stopTyping", { userId });
     });
 
     socket.on("userOnline", (data) => {
-      // Broadcast to all connected clients except sender
       socket.broadcast.emit("userWentOnline", {
         userId: data.userId,
         isOnline: true,
@@ -218,13 +199,13 @@ const initialiseSocket = (server) => {
     });
 
     socket.on("userOffline", (data) => {
-      // Broadcast to all connected clients except sender
       socket.broadcast.emit("userWentOffline", {
         userId: data.userId,
         isOnline: false,
         lastSeen: data.lastSeen || new Date().toISOString(),
       });
     });
+
     const onlineUsers = new Map();
     const getUserOnlineStatus = (userId) => {
       return onlineUsers.has(userId);

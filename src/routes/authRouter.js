@@ -5,60 +5,8 @@ const User = require("../modules/user");
 const { sendWelcomeEmail } = require("../utils/mailer");
 const bcrypt = require("bcrypt");
 
-// authRouter.post("/signup", async (req, res) => {
-//   try {
-//     // Validation of data
-//     validateSignupData(req);
-
-//     const {
-//       firstName,
-//       lastName,
-//       emailId,
-//       password,
-//       skills,
-//       age,
-//       gender,
-//       photoUrl,
-//     } = req.body;
-
-//     // Encrypting password by bcrypt
-//     const passwordHash = await bcrypt.hash(password, 11);
-
-//     const user = new User({
-//       firstName,
-//       lastName,
-//       emailId,
-//       password: passwordHash,
-//       skills,
-//       age,
-//       gender,
-//       photoUrl,
-//     });
-
-//     const savedUser = await user.save();
-//     const token = await savedUser.getJWT();
-
-//     res.cookie("token", token, {
-//       expires: new Date(Date.now() + 96 * 3600000), // 96 hours
-//       httpOnly: true,
-//       secure: true,
-//       sameSite: "None",
-//     });
-
-//     res.json({ message: "User added successfully!", data: savedUser });
-//   } catch (error) {
-//     if (error.code === 11000 && error.keyPattern && error.keyPattern.emailId) {
-//       // Duplicate email error
-//       return res.status(400).send("Email already exists.");
-//     }
-
-//     res.status(500).send(error.message);
-//   }
-// });
-
 authRouter.post("/signup", async (req, res) => {
   try {
-    // Validation of data
     validateSignupData(req);
 
     const {
@@ -72,7 +20,6 @@ authRouter.post("/signup", async (req, res) => {
       photoUrl,
     } = req.body;
 
-    // Encrypting password by bcrypt
     const passwordHash = await bcrypt.hash(password, 11);
 
     const user = new User({
@@ -89,7 +36,6 @@ authRouter.post("/signup", async (req, res) => {
     const savedUser = await user.save();
     const token = await savedUser.getJWT();
 
-    // Cookie set
     res.cookie("token", token, {
       expires: new Date(Date.now() + 96 * 3600000), // 96 hours
       httpOnly: true,
@@ -146,6 +92,7 @@ authRouter.post("/login", async (req, res) => {
     }
   } catch (error) {
     res.status(403).send(error.message);
+    return res.status(401).send("Session expired, please login again.");
   }
 });
 
