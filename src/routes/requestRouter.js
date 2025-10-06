@@ -114,7 +114,7 @@ requestRouter.post(
 
 //contact send email
 
-requestRouter.post("/api/send-email", async (req, res) => {
+requestRouter.post("/send-email", async (req, res) => {
   try {
     const { firstName, lastName, email, phone, message, photoUrl } = req.body;
 
