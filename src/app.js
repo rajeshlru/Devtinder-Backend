@@ -15,7 +15,7 @@ const User = require("./modules/user");
 
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: ["https://tinder-devs.netlify.app", "http://localhost:3000"],
     credentials: true,
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
   })
