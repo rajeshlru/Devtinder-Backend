@@ -408,7 +408,7 @@ const sendContactFormEmail = async (formData) => {
   try {
     const { data, error } = await resend.emails.send({
       from: "DevTinder Contact <onboarding@resend.dev>",
-      to: "rajeshelluru143@gmail.com", // Your email to receive contact forms
+      to: process.env.ADMIN_EMAIL,
       subject: `New Contact Form: ${firstName} ${lastName}`,
       html: `
         <div style="font-family: 'Arial', sans-serif; max-width: 600px; margin: 0 auto; background: #f4f6f9; border-radius: 15px; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.05);">
