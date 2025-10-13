@@ -69,7 +69,12 @@ authRouter.post("/login", async (req, res) => {
       message: "Email and password are required",
     });
   }
-
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(emailId)) {
+    return res.status(400).json({
+      message: "Email is not valid",
+    });
+  }
   try {
     emailId = emailId.toLowerCase();
     const user = await User.findOne({ emailId: emailId }).collation({
@@ -78,27 +83,36 @@ authRouter.post("/login", async (req, res) => {
     });
 
     if (!user) {
-      throw new Error("Email is not valid");
+      return res.status(404).json({
+        message: "Email is not registered",
+      });
     }
 
     const isPasswordMatch = await user.PasswordValidate(password);
-    if (isPasswordMatch) {
-      const token = await user.getJWT();
-
-      res.cookie("token", token, {
-        expires: new Date(Date.now() + 96 * 3600000), // 96 hours
-        httpOnly: true,
-        secure: true,
-        sameSite: "None",
+    if (!isPasswordMatch) {
+      return res.status(401).json({
+        message: "Password is incorrect",
       });
-
-      res.json({ message: "Login Successful!", data: user });
-    } else {
-      throw new Error("Password is incorrect");
     }
+
+    const token = await user.getJWT();
+
+    res.cookie("token", token, {
+      expires: new Date(Date.now() + 96 * 3600000), // 96 hours
+      httpOnly: true,
+      secure: true,
+      sameSite: "None",
+    });
+
+    return res.json({
+      message: "Login Successful!",
+      data: user,
+    });
   } catch (error) {
-    res.status(403).send(error.message);
-    return res.status(401).send("Session expired, please login again.");
+    console.error("Login error:", error);
+    return res.status(500).json({
+      message: "Internal server error during login",
+    });
   }
 });
 

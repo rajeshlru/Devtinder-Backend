@@ -364,7 +364,7 @@ const sendConnectionRequestEmail = async (toUser, fromUser) => {
       </p>
       
       <div style="text-align:center; margin: 30px 0;">
-        <a href="https://tinder-devs.netlify.app/feed" 
+        <a href="https://tinder-devs.netlify.app/" 
            style="display:inline-block; padding: 14px 30px; background: #ff5722; color: #fff; font-weight: bold; font-size: 16px; text-decoration: none; border-radius: 50px; box-shadow: 0 5px 15px rgba(0,0,0,0.2); transition: all 0.3s ease;">
            View Request
         </a>
