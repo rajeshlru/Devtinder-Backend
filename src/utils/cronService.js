@@ -824,6 +824,9 @@
 
 const { Resend } = require("resend");
 const cron = require("node-cron");
+const User = require("../modules/user");
+const ConnectionRequest = require("../modules/connectionRequest");
+require("dotenv").config();
 
 // Initialize Resend
 const resend = new Resend(process.env.RESEND_API_KEY);
@@ -1973,4 +1976,4 @@ class CronService {
   }
 }
 
-module.exports = CronService;
+module.exports = new CronService();
