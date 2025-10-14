@@ -24,43 +24,6 @@ class CronService {
     console.log("🎉 All cron jobs initialized and scheduled with Resend");
   }
 
-  async sendEmail(
-    to,
-    subject,
-    html,
-    from = "DevTinder <onboarding@resend.dev>"
-  ) {
-    const allowedEmails = process.env.ADMIN_EMAIL;
-    const isProduction = process.env.NODE_ENV === "production";
-
-    if (!isProduction && !allowedEmails.includes(to)) {
-      console.log(`🚫 Email blocked in development for: ${to}`);
-      console.log(`   Subject: ${subject}`);
-      return true;
-    }
-
-    try {
-      console.log(`📧 Sending email to: ${to}`);
-      const { data, error } = await this.resend.emails.send({
-        from,
-        to,
-        subject,
-        html,
-      });
-
-      if (error) {
-        console.error(`❌ Resend API error for ${to}:`, error);
-        return false;
-      }
-
-      console.log(`✅ Email sent successfully to ${to}`);
-      return true;
-    } catch (error) {
-      console.error(`💥 Exception during email sending for ${to}:`, error);
-      return false;
-    }
-  }
-
   startUserOnboardingSequence() {
     const day1Job = cron.schedule("* * * * *", async () => {
       try {
