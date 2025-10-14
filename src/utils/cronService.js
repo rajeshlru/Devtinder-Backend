@@ -131,14 +131,24 @@ class CronService {
     //console.log("   - Day3: 9 AM after 2 days");
   }
 
-  // Generic email sending method using Resend
   async sendEmail(
     to,
     subject,
     html,
     from = "DevTinder <onboarding@resend.dev>"
   ) {
+    // Block emails to non-verified addresses in development
+    const allowedEmails = process.env.ADMIN_EMAIL;
+    const isProduction = process.env.NODE_ENV === "production";
+
+    if (!isProduction && !allowedEmails.includes(to)) {
+      console.log(`🚫 Email blocked in development: ${to}`);
+      console.log(`   Subject: ${subject}`);
+      return true;
+    }
+
     try {
+      console.log(`📧 Sending email to: ${to}`);
       const { data, error } = await this.resend.emails.send({
         from: from,
         to: to,
@@ -147,14 +157,14 @@ class CronService {
       });
 
       if (error) {
-        console.error(`❌ Resend email error to ${to}:`, error);
+        console.error(`❌ Resend error:`, error);
         return false;
       }
 
-      console.log(`✅ Email sent successfully to ${to}`);
+      console.log(`✅ Email sent to ${to}`);
       return true;
     } catch (error) {
-      console.error(`❌ Email sending failed to ${to}:`, error);
+      console.error(`💥 Email exception:`, error);
       return false;
     }
   }
