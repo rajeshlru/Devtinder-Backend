@@ -252,7 +252,7 @@ class CronService {
               <p style="font-size: 15px; color:#6b7280; line-height: 1.6; margin: 0 0 25px;">
                 Let's make ${new Date().getFullYear()} your most productive and successful year yet!
               </p>
-              <a href="http://yourapp.com/dashboard" 
+              <a href="https://tinder-devs.netlify.app/" 
                  style="display: inline-flex; align-items: center; gap: 8px; padding: 16px 35px; background: linear-gradient(135deg, #10b981, #059669); color: white; font-weight: 600; text-decoration: none; border-radius: 50px; box-shadow: 0 6px 20px rgba(16, 185, 129, 0.3); font-size: 16px;">
                  <span>🚀</span> Start Your ${new Date().getFullYear()} Journey
               </a>
@@ -324,7 +324,7 @@ class CronService {
               </div>
 
               <div style="margin-top: 30px;">
-                <a href="http://yourapp.com/profile" 
+                <a href="https://tinder-devs.netlify.app/profile" 
                    style="display: inline-block; padding: 14px 32px; background: linear-gradient(135deg, #4f46e5, #7c3aed); color: white; font-weight: 600; text-decoration: none; border-radius: 50px; margin: 0 10px;">
                    Complete Profile
                 </a>
@@ -371,7 +371,7 @@ class CronService {
               </div>
 
               <div style="margin-top: 30px;">
-                <a href="http://yourapp.com/explore" 
+                <a href="https://tinder-devs.netlify.app/" 
                    style="display: inline-block; padding: 14px 32px; background: linear-gradient(135deg, #f59e0b, #d97706); color: white; font-weight: 600; text-decoration: none; border-radius: 50px;">
                    Explore Features
                 </a>
@@ -429,7 +429,7 @@ class CronService {
                 </p>
               </div>
 
-              <a href="http://yourapp.com/dashboard" 
+              <a href="https://tinder-devs.netlify.app/" 
                  style="display: inline-block; padding: 14px 32px; background: linear-gradient(135deg, #f59e0b, #d97706); color: white; font-weight: 600; text-decoration: none; border-radius: 50px;">
                  Continue Your Journey
               </a>
@@ -620,7 +620,7 @@ class CronService {
             </div>
 
             <div style="margin-top: 30px;">
-              <a href="http://yourapp.com/feed" 
+              <a href="https://tinder-devs.netlify.app/" 
                  style="display: inline-block; padding: 14px 32px; background: linear-gradient(135deg, #10b981, #059669); color: white; font-weight: 600; text-decoration: none; border-radius: 50px; margin: 0 10px;">
                  Check New Matches
               </a>
@@ -679,7 +679,7 @@ class CronService {
             </p>
 
             <div style="margin-top: 30px;">
-              <a href="http://yourapp.com/connections" 
+              <a href="https://tinder-devs.netlify.app/connections" 
                  style="display: inline-block; padding: 16px 40px; background: linear-gradient(135deg, #ec4899, #8b5cf6); color: white; font-weight: 600; text-decoration: none; border-radius: 50px; font-size: 16px; box-shadow: 0 6px 20px rgba(236, 72, 153, 0.3);">
                  View Connection Requests
               </a>
@@ -729,11 +729,11 @@ class CronService {
             </p>
 
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 30px;">
-              <a href="http://yourapp.com/claim-offer" 
+              <a href="https://tinder-devs.netlify.app/about" 
                  style="display: block; padding: 14px 20px; background: linear-gradient(135deg, #10b981, #059669); color: white; font-weight: 600; text-decoration: none; border-radius: 10px; text-align: center;">
                  Claim Offer 🎁
               </a>
-              <a href="http://yourapp.com/feedback" 
+              <a href="https://tinder-devs.netlify.app/about" 
                  style="display: block; padding: 14px 20px; background: linear-gradient(135deg, #6b7280, #4b5563); color: white; font-weight: 600; text-decoration: none; border-radius: 10px; text-align: center;">
                  Give Feedback 💬
               </a>
@@ -891,7 +891,7 @@ class CronService {
 
              <!-- CTA Section -->
              <div style="text-align: center;">
-               <a href="http://yourapp.com/feed"
+               <a href="https://tinder-devs.netlify.app/"
                   style="display: inline-flex; align-items: center; gap: 15px; padding: 20px 50px; background: linear-gradient(135deg, #ec4899, #8b5cf6); color: white; font-weight: 700; text-decoration: none; border-radius: 50px; font-size: 18px; box-shadow: 0 10px 30px rgba(236, 72, 153, 0.3); transition: all 0.3s ease; margin-bottom: 20px;">
                   <span style="font-size: 24px;">🚀</span>
                   Explore This Week's Opportunities
@@ -929,54 +929,228 @@ class CronService {
 
          </div>
        </body>
-       </html>
+       </>
     `;
 
     return await this.sendEmail(user.emailId, subject, html);
   }
 
   async sendUserWeeklyDigest(user) {
-    const subject = `🌟 Your Weekly DevTinder Digest - Amazing Connections Await, ${user.firstName}!`;
+    try {
+      const oneWeekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
 
-    const html = `
-    <!DOCTYPE html>
-    <html>
-    <head>
-      <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
-      </style>
-    </head>
-    <body style="font-family: 'Inter', Arial, sans-serif; margin: 0; padding: 0; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; display: flex; align-items: center; justify-content: center;">
-      <div style="max-width: 650px; margin: 20px; background: #ffffff; border-radius: 28px; overflow: hidden; box-shadow: 0 30px 60px rgba(0,0,0,0.15);">
-        
-        <!-- Premium Header -->
-        <div style="background: linear-gradient(135deg, #6366f1, #8b5cf6); padding: 50px 40px; text-align: center; position: relative;">
-          <!-- Decorative Elements -->
-          <div style="position: absolute; top: 25px; left: 25px; background: rgba(255,255,255,0.15); padding: 12px; border-radius: 50%;">
-            <span style="font-size: 22px; color: white;">✨</span>
-          </div>
-          <div style="position: absolute; bottom: 25px; right: 25px; background: rgba(255,255,255,0.15); padding: 12px; border-radius: 50%;">
-            <span style="font-size: 22px; color: white;">🎯</span>
-          </div>
-          
-          <!-- Main Icon -->
-          <div style="width: 120px; height: 120px; background: linear-gradient(135deg, rgba(255,255,255,0.2), rgba(255,255,255,0.1)); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 30px; border: 3px solid rgba(255,255,255,0.3);">
-            <span style="font-size: 52px; color: white;">📰</span>
-          </div>
-          
-          <h1 style="margin: 0; font-size: 42px; color: white; font-weight: 800; letter-spacing: -1px; line-height: 1.1;">Weekly Digest</h1>
-          <p style="margin: 15px 0 0; color: rgba(255,255,255,0.9); font-size: 18px; font-weight: 400;">Hello ${user.firstName}! Your curated developer news</p>
-        </div>
+      // Fetch weekly stats for the user
+      const newConnections = await ConnectionRequest.countDocuments({
+        toUserId: user._id,
+        status: "accepted", // Assuming you have an 'accepted' status
+        updatedAt: { $gte: oneWeekAgo },
+      });
 
-        <!-- Rest of your user weekly digest HTML content -->
-        <!-- ... (include the rest of your weekly digest HTML here) ... -->
-        
-      </div>
-    </body>
-    </html>
-  `;
+      const profileViews = Math.floor(Math.random() * (25 - 5 + 1)) + 5; // Random number between 5 and 25
+      const messagesReceived = Math.floor(Math.random() * (8 - 0 + 1)); // Random number between 0 and 8
 
-    return await this.sendEmail(user.emailId, subject, html);
+      const topMatches = await User.find({
+        _id: { $ne: user._id }, // Not the user themselves
+        skills: { $in: user.skills || [] }, // Find users with at least one matching skill
+        lastActive: { $gte: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000) }, // Active in the last 30 days
+      })
+        .limit(2)
+        .select("firstName lastName avatarUrl headline skills"); // Select only necessary fields
+
+      const featuredArticles = [
+        {
+          title: "The Rise of Server-Side WebAssembly",
+          description:
+            "Exploring how WASM is breaking out of the browser and into the cloud for high-performance computing.",
+          url: "https://tinder-devs.netlify.app/terms",
+        },
+        {
+          title: 'Project Spotlight: "CodeCanvas"',
+          description:
+            "A collaborative real-time code editor built by a community member, showcasing the power of WebSockets.",
+          url: "https://tinder-devs.netlify.app/",
+        },
+      ];
+
+      const matchesHtml =
+        topMatches.length > 0
+          ? topMatches
+              .map(
+                (match) => `
+        <td style="padding: 10px; width: 50%; vertical-align: top;">
+          <a href="https://tinder-devs.netlify.app/profile/${
+            match._id
+          }" target="_blank" style="text-decoration: none; color: inherit;">
+            <div style="background: #f8f9fa; border-radius: 16px; overflow: hidden; text-align: center; border: 1px solid #e9ecef; box-shadow: 0 4px 10px rgba(0,0,0,0.04); height: 100%;">
+              <img src="${
+                match.avatarUrl || "https://i.pravatar.cc/150?u=" + match._id
+              }" alt="${
+                  match.firstName
+                }" style="width: 100%; height: 160px; object-fit: cover; display: block;">
+              <div style="padding: 20px;">
+                <h3 style="margin: 0 0 5px; font-size: 18px; color: #343a40; font-weight: 700;">${
+                  match.firstName
+                } ${match.lastName}</h3>
+                <p style="margin: 0 0 15px; font-size: 14px; color: #6c757d; min-height: 40px;">${
+                  match.headline
+                }</p>
+                <div style="margin-bottom: 20px; min-height: 50px;">
+                  ${match.skills
+                    .slice(0, 3)
+                    .map(
+                      (skill) =>
+                        `<span style="background: #e9ecef; color: #495057; border-radius: 12px; padding: 4px 10px; font-size: 12px; display: inline-block; margin: 2px;">${skill}</span>`
+                    )
+                    .join("")}
+                </div>
+                <span style="display: inline-block; background-color: #6366f1; color: #ffffff; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 14px;">View Profile</span>
+              </div>
+            </div>
+          </a>
+        </td>
+      `
+              )
+              .join("")
+          : `
+        <td style="padding: 20px; text-align: center; color: #6c757d;">
+          Update your profile with more skills to discover new matches!
+        </td>
+      `;
+
+      const articlesHtml = featuredArticles
+        .map(
+          (article) => `
+        <a href="${article.url}" target="_blank" style="text-decoration: none; color: inherit; display: block; padding: 20px; border-bottom: 1px solid #e9ecef;">
+          <h4 style="margin: 0 0 5px; font-size: 16px; color: #4f46e5; font-weight: 700;">${article.title}</h4>
+          <p style="margin: 0; font-size: 14px; color: #6c757d; line-height: 1.5;">${article.description}</p>
+        </a>
+      `
+        )
+        .join("");
+
+      // 3. ASSEMBLE THE FINAL EMAIL
+      // ============================
+
+      const subject = `🌟 Your Weekly DevTinder Digest - Amazing Connections Await, ${user.firstName}!`;
+
+      const html = `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <title>${subject}</title>
+        <style>
+          @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+          body { margin: 0; padding: 0; -webkit-font-smoothing: antialiased; }
+          a { color: #6366f1; text-decoration: none; }
+        </style>
+      </head>
+      <body style="font-family: 'Inter', Arial, sans-serif; margin: 0; padding: 0; background: #f1f5f9; width: 100%;">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0" style="background: #f1f5f9; padding: 20px 0;">
+          <tr>
+            <td align="center">
+              <div style="max-width: 650px; margin: 0 auto; background: #ffffff; border-radius: 28px; overflow: hidden; box-shadow: 0 30px 60px rgba(0,0,0,0.1);">
+                
+                <!-- Premium Header -->
+                <div style="background: linear-gradient(135deg, #6366f1, #8b5cf6); padding: 50px 40px; text-align: center; position: relative;">
+                  <div style="position: absolute; top: 25px; left: 25px; background: rgba(255,255,255,0.15); padding: 12px; border-radius: 50%;">
+                    <span style="font-size: 22px; color: white; line-height: 1;">✨</span>
+                  </div>
+                  <div style="position: absolute; bottom: 25px; right: 25px; background: rgba(255,255,255,0.15); padding: 12px; border-radius: 50%;">
+                    <span style="font-size: 22px; color: white; line-height: 1;">🎯</span>
+                  </div>
+                  <div style="width: 120px; height: 120px; background: linear-gradient(135deg, rgba(255,255,255,0.2), rgba(255,255,255,0.1)); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 30px; border: 3px solid rgba(255,255,255,0.3);">
+                    <span style="font-size: 52px; color: white;">📰</span>
+                  </div>
+                  <h1 style="margin: 0; font-size: 42px; color: white; font-weight: 800; letter-spacing: -1px; line-height: 1.1;">Weekly Digest</h1>
+                  <p style="margin: 15px 0 0; color: rgba(255,255,255,0.9); font-size: 18px; font-weight: 400;">Hello ${
+                    user.firstName
+                  }! Here's what you missed.</p>
+                </div>
+
+                <!-- Main Content Body -->
+                <div style="padding: 40px; color: #343a40; line-height: 1.6;">
+                
+                  <!-- Weekly Stats Section -->
+                  <h2 style="font-size: 24px; font-weight: 700; margin-top: 0; margin-bottom: 25px; color: #111827; text-align: center;">Your Week in Numbers</h2>
+                  <div style="display: flex; justify-content: space-around; text-align: center; background-color: #f8f9fa; border-radius: 16px; padding: 25px; margin-bottom: 40px;">
+                    <div style="flex: 1;">
+                      <div style="font-size: 32px; font-weight: 800; color: #6366f1;">${profileViews}</div>
+                      <div style="font-size: 14px; color: #6c757d;">Profile Views</div>
+                    </div>
+                    <div style="flex: 1; border-left: 1px solid #dee2e6; border-right: 1px solid #dee2e6;">
+                      <div style="font-size: 32px; font-weight: 800; color: #6366f1;">${newConnections}</div>
+                      <div style="font-size: 14px; color: #6c757d;">New Connections</div>
+                    </div>
+                    <div style="flex: 1;">
+                      <div style="font-size: 32px; font-weight: 800; color: #6366f1;">${messagesReceived}</div>
+                      <div style="font-size: 14px; color: #6c757d;">Messages</div>
+                    </div>
+                  </div>
+                  
+                  <!-- Potential Matches Section -->
+                  <h2 style="font-size: 24px; font-weight: 700; margin-top: 0; margin-bottom: 20px; color: #111827; text-align: center;">🔥 Your Top Weekly Matches</h2>
+                  <table border="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse: collapse;">
+                    <tbody>
+                      <tr>
+                        ${matchesHtml}
+                      </tr>
+                    </tbody>
+                  </table>
+                  
+                  <!-- Featured Articles / Projects Section -->
+                  <div style="margin-top: 40px;">
+                    <h2 style="font-size: 24px; font-weight: 700; margin-top: 0; margin-bottom: 20px; color: #111827; text-align: center;">📚 Top Reads & Projects</h2>
+                    <div style="border: 1px solid #e9ecef; border-radius: 16px; overflow: hidden;">
+                      ${articlesHtml.slice(0, -1)} <!-- Remove last border -->
+                       <a href="${
+                         featuredArticles[featuredArticles.length - 1].url
+                       }" target="_blank" style="text-decoration: none; color: inherit; display: block; padding: 20px;">
+                         <h4 style="margin: 0 0 5px; font-size: 16px; color: #4f46e5; font-weight: 700;">${
+                           featuredArticles[featuredArticles.length - 1].title
+                         }</h4>
+                         <p style="margin: 0; font-size: 14px; color: #6c757d; line-height: 1.5;">${
+                           featuredArticles[featuredArticles.length - 1]
+                             .description
+                         }</p>
+                       </a>
+                    </div>
+                  </div>
+                  
+                  <!-- Main Call to Action -->
+                  <div style="text-align: center; margin: 50px 0;">
+                    <a href="https://tinder-devs.netlify.app/dashboard" target="_blank" style="background: linear-gradient(135deg, #6366f1, #8b5cf6); color: white; padding: 18px 35px; border-radius: 12px; text-decoration: none; font-weight: 700; font-size: 18px; display: inline-block; box-shadow: 0 10px 20px rgba(99, 102, 241, 0.3);">Explore More on DevTinder</a>
+                  </div>
+                </div>
+                
+                <!-- Footer -->
+                <div style="background-color: #f8f9fa; padding: 30px 40px; text-align: center; border-top: 1px solid #e9ecef;">
+                  <p style="margin: 0 0 15px; font-size: 14px; color: #6c757d;">Happy connecting,<br>The DevTinder Team</p>
+                  <p style="margin: 0; font-size: 12px; color: #adb5bd; line-height: 1.5;">
+                    You are receiving this email because you're a member of DevTinder.
+                    <br>
+                    <a href="https://tinder-devs.netlify.app/settings/notifications" target="_blank" style="color: #6c757d; text-decoration: underline;">Email Settings</a> | <a href="https://tinder-devs.netlify.app/unsubscribe?email=${
+                      user.emailId
+                    }" target="_blank" style="color: #6c757d; text-decoration: underline;">Unsubscribe</a>
+                  </p>
+                  <p style="margin: 10px 0 0; font-size: 12px; color: #adb5bd;">© ${new Date().getFullYear()} DevTinder, Inc. All Rights Reserved.</p>
+                </div>
+                
+              </div>
+            </td>
+          </tr>
+        </table>
+      </body>
+      </html>
+      `;
+
+      return await this.sendEmail(user.emailId, subject, html);
+    } catch (error) {
+      console.error(
+        `❌ Failed to send weekly digest to ${user.emailId}:`,
+        error
+      );
+      return false;
+    }
   }
 
   async sendWeeklyAdminReport(
@@ -1255,7 +1429,7 @@ class CronService {
 
                   <!-- CTA Button -->
                   <div style="text-align: center;">
-                    <a href="http://yourapp.com/feed" 
+                    <a href="https://tinder-devs.netlify.app/" 
                        style="display: inline-flex; align-items: center; gap: 12px; padding: 18px 45px; background: linear-gradient(135deg, #10b981, #059669); color: white; font-weight: 700; text-decoration: none; border-radius: 50px; font-size: 16px; box-shadow: 0 8px 25px rgba(16, 185, 129, 0.3); transition: all 0.3s ease;">
                        <span style="font-size: 20px;">🚀</span>
                        Explore New Matches
@@ -1280,7 +1454,7 @@ class CronService {
                   </p>
                   <p style="margin: 15px 0 0; color: #6b7280; font-size: 12px;">
                     If you'd like to adjust your email preferences, you can 
-                    <a href="http://yourapp.com/preferences" style="color: #9ca3af; text-decoration: underline;">update them here</a>.
+                    <a href="https://tinder-devs.netlify.app/about" style="color: #9ca3af; text-decoration: underline;">update them here</a>.
                   </p>
                 </div>
 
